@@ -138,3 +138,47 @@ function obtener_platos_con_campos_personalizados()
 
 	return var_dump($platos_con_campos);
 }
+
+add_shortcode('hola', 'return_platos');
+
+
+function return_platos()
+{
+	// $platos = get_posts(
+	// 	array(
+	// 		'post_type' => 'plato',
+	// 		'posts_per_page' => -1,  // -1 para obtener todos los platos, puedes ajustar esto según tus necesidades.
+	// 	)
+	// );
+
+
+	// foreach ($platos as $plato) {
+	// 	$plato_id = $plato->ID;
+	// 	$nombre_plato = $plato->post_title;
+	// 	$precio_plato = get_field('price', $plato_id);
+
+	// 	echo 'Nombre del plato: ' . $nombre_plato . '<br>';
+	// 	echo 'Precio del plato: ' . $precio_plato . '<br>';
+	// 	echo '<hr>';
+	// }
+
+	$platos = get_posts(
+		[
+			'post_type' => 'plato',
+			'numberposts' => -1,
+		]
+	);
+
+	foreach ($platos as $plato) {
+		$ID = $plato->ID;
+		$title = $plato->post_title;
+
+		$platoPrice = get_field('price', $ID);
+		$platoDescription = get_field('description', $ID);
+
+		echo $ID . " - " . $title . " - " . $platoPrice . " - " . $platoDescription;
+		echo '<hr>';
+	}
+
+
+}
