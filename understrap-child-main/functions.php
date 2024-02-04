@@ -106,42 +106,7 @@ function quitar_editor_en_plato()
 
 add_action('init', 'quitar_editor_en_plato');
 
-// Add Shortcode
-function obtener_platos_con_campos_personalizados()
-{
-	global $wpdb;
-
-	// Nombre de las tablas
-	$tabla_cpt = $wpdb->prefix . 'posts';
-	$tabla_postmeta = $wpdb->prefix . 'postmeta';
-
-	// Consulta SQL para obtener platos del CPT "plato" con campos personalizados de ACF
-	$consulta = "
-        SELECT p.ID, p.post_title, pm.meta_key, pm.meta_value
-        FROM $tabla_cpt AS p
-        LEFT JOIN $tabla_postmeta AS pm ON p.ID = pm.post_id
-        WHERE p.post_type = 'plato'
-        AND p.post_status = 'publish'
-    ";
-
-	// Ejecutar la consulta
-	$resultados = $wpdb->get_results($consulta);
-
-	// Organizar los resultados por ID del plato
-	$platos_con_campos = array();
-	foreach ($resultados as $resultado) {
-		$platos_con_campos[$resultado->ID]['post_title'] = $resultado->post_title;
-		$platos_con_campos[$resultado->ID]['campos'][$resultado->meta_key] = $resultado->meta_value;
-	}
-
-	// Devolver los resultados
-
-	return var_dump($platos_con_campos);
-}
-
-add_shortcode('hola', 'return_platos');
-
-
+// Añadir el shortcode de entrantes
 function return_platos()
 {
 	// $platos = get_posts(
@@ -162,23 +127,66 @@ function return_platos()
 	// 	echo '<hr>';
 	// }
 
+	$PLATOS_ESTRELLA = [
+		19,
+		18,
+		39,
+		41
+	];
+	$MONEDA = "$";
+
 	$platos = get_posts(
 		[
 			'post_type' => 'plato',
 			'numberposts' => -1,
 		]
 	);
+	$stringFinal = "<section class='menu entrantes'>\n";
+	$stringFinal .= "<h1>Entrantes</h1>\n";
+	$stringFinal .= "<ul class='plates'>\n";
+
 
 	foreach ($platos as $plato) {
 		$ID = $plato->ID;
-		$title = $plato->post_title;
+		$platTitle = $plato->post_title;
+
+		// Comprovante para ver si existe titulo del post, en caso que no, cogemos el titulo del como componente
+		$platTitle = ($platTitle ? $platTitle : get_field('title', $ID));
 
 		$platoPrice = get_field('price', $ID);
 		$platoDescription = get_field('description', $ID);
 
-		echo $ID . " - " . $title . " - " . $platoPrice . " - " . $platoDescription;
-		echo '<hr>';
+		$stringFinal .= "<li class='plate'>\n";
+		$stringFinal .= "	<div class='text'>\n";
+		$stringFinal .= "		<div class='top'>\n";
+		$stringFinal .= "			<span class='name'>" . trim($platTitle) . "</span>\n";
+		$stringFinal .= "			<div class='line'>\n";
+		if (in_array($ID, $PLATOS_ESTRELLA)) {
+			$stringFinal .= "			<img src='http://localhost/wp-content/uploads/2024/02/smallBlackStar.png'>\n";
+		}
+		$stringFinal .= "			</div>\n";
+		$stringFinal .= "		</div>\n";
+		$stringFinal .= "		<div class='bottom'>\n";
+		$stringFinal .= "			<span class='description'>" . trim($platoDescription) . "</span>\n";
+		$stringFinal .= "		</div>\n";
+		$stringFinal .= "	</div>\n";
+		$stringFinal .= "	<div class='price'>\n";
+		$stringFinal .= "		<span class='currency'>$MONEDA</span>\n";
+		$stringFinal .= "		<span class='number'>" . trim($platoPrice) . "</span>\n";
+		$stringFinal .= "	</div>\n";
+		$stringFinal .= "</li>\n";
+
 	}
-
-
+	$stringFinal .= "</ul>\n";
+	$stringFinal .= "</section>\n";
+	return $stringFinal;
 }
+add_shortcode('entrantes', 'return_platos');
+
+// Enlaza el archivo style.css
+function understrap_child_enqueue_styles()
+{
+	wp_enqueue_style('understrap-style', get_template_directory_uri() . '/style.css');
+	wp_enqueue_style('understrap-child-style', get_stylesheet_directory_uri() . '/style.css', array('understrap-style'));
+}
+add_action('wp_enqueue_scripts', 'understrap_child_enqueue_styles');

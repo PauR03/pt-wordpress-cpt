@@ -12,3 +12,110 @@
  Tags: one-column, custom-menu, featured-images, theme-options, translation-ready
  GitHub Theme URI: understrap/understrap-child
 */
+
+@font-face {
+    font-family: 'NimbusRomanBecker';
+    src: url('./fonts/nimbus-roman-becker-d-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+section.menu {
+    /* font-family: 'NimbusRomanBecker', sans-serif; */
+
+    h1 {
+        text-align: center;
+        font-weight: bold;
+        margin: 30px 0;
+    }
+
+    ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0;
+
+        /* A partir de 767px, cambiar a una columna */
+        li.plate {
+            width: 46%;
+            min-width: 450px;
+            display: flex;
+            justify-content: space-between;
+            margin: 0 1% 30px;
+
+            div.text {
+                width: 90%;
+
+                div.top {
+                    position: relative;
+                    display: flex;
+                    overflow: hidden;
+                    width: 95%;
+
+                    div.line {
+                        img {
+                            top: 0;
+                            position: absolute;
+                            width: 10px;
+                            height: 10px;
+                            max-width: unset;
+                        }
+                    }
+
+                    div.line::after {
+                        content: "";
+                        border-bottom: 1px solid #d8d8d8;
+                        display: block;
+                        width: 100%;
+                        position: absolute;
+                        bottom: 0;
+                    }
+
+
+                    span.name {
+                        text-transform: uppercase;
+                        margin-right: 10px;
+                        letter-spacing: 2px;
+                        font-size: 14px;
+                    }
+
+                }
+            }
+
+            span.description {
+                margin-top: 15px;
+                display: block;
+                color: #d8d8d8;
+            }
+
+            div.price {
+                white-space: nowrap;
+                width: 10%;
+                text-align: right;
+            }
+        }
+
+    }
+}
+
+@media (max-width: 470px) {
+
+    section.menu ul li.plate {
+        width: 80%;
+        min-width: unset;
+        margin: 0;
+        margin-bottom: 30px;
+    }
+
+    section.menu ul li.plate div.text div.top span.name {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    section.menu ul li.plate span.description,
+    section.menu ul li.plate div.price {
+        font-size: 14px;
+    }
+
+}
