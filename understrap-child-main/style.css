@@ -20,8 +20,8 @@
     font-style: normal;
 }
 
-section.menu {
-    /* font-family: 'NimbusRomanBecker', sans-serif; */
+/* section.menu {
+    font-family: 'NimbusRomanBecker', sans-serif;
 
     h1 {
         text-align: center;
@@ -97,9 +97,9 @@ section.menu {
         }
 
     }
-}
+} */
 
-/* section.menu h1 {
+section.menu h1 {
     text-align: center;
     font-weight: bold;
     margin: 30px 0;
@@ -167,13 +167,13 @@ section.menu ul li.plate div.price {
     width: 10%;
     min-width: 50px;
     text-align: right;
-} */
+}
 
 
 @media (max-width: 470px) {
 
     section.menu ul li.plate {
-        width: 80%;
+        width: 100%;
         min-width: unset;
         margin: 0;
         margin-bottom: 30px;
